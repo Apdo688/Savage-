@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAVAGE - بوابة الدفع</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #00aaff;
+    --blue-glow: #0066ff;
+    --white: #ffffff;
+    --card: #0a0a0a;
+    --border: rgba(0,170,255,0.2);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #000;
+    color: var(--white);
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+  .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .particle {
+    position: absolute; width: 2px; height: 2px;
+    background: var(--blue); border-radius: 50%;
+    animation: float linear infinite; opacity: 0;
+  }
+  @keyframes float {
+    0% { transform: translateY(100vh); opacity: 0; }
+    10% { opacity: 0.6; } 90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+  }
+  header { position: relative; z-index: 1; text-align: center; padding: 40px 20px 20px; width: 100%; }
+  .logo { font-family: 'Bebas Neue', cursive; font-size: clamp(48px, 12vw, 80px); letter-spacing: 12px; display: inline-block; }
+  .logo span.normal { color: var(--white); }
+  .logo span.blue {
+    color: var(--blue);
+    text-shadow: 0 0 10px var(--blue), 0 0 30px var(--blue), 0 0 60px var(--blue-glow);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { text-shadow: 0 0 10px var(--blue), 0 0 30px var(--blue), 0 0 60px var(--blue-glow); }
+    50% { text-shadow: 0 0 20px var(--blue), 0 0 50px var(--blue), 0 0 100px var(--blue-glow); }
+  }
+  .logo-lines { position: relative; height: 3px; margin: 4px auto; width: 90%; }
+  .logo-lines::before, .logo-lines::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  }
+  .logo-lines::before { top: 0; } .logo-lines::after { bottom: 0; }
+  .logo-lines .center-glow {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 40px; height: 3px; background: var(--blue);
+    box-shadow: 0 0 15px var(--blue), 0 0 30px var(--blue-glow); border-radius: 2px;
+  }
+  .subtitle { font-size: 13px; color: rgba(255,255,255,0.4); letter-spacing: 4px; text-transform: uppercase; margin-top: 8px; }
+  .card {
+    position: relative; z-index: 1; background: var(--card);
+    border: 1px solid var(--border); border-radius: 16px; padding: 28px 24px;
+    width: calc(100% - 32px); max-width: 420px; margin: 20px auto;
+    box-shadow: 0 0 40px rgba(0,170,255,0.05); animation: fadeUp 0.6s ease forwards;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .card-title { font-size: 13px; color: var(--blue); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .card-title::before { content: ''; width: 20px; height: 1px; background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+  .voda-box {
+    background: linear-gradient(135deg, #0a0a0a, #111);
+    border: 1px solid rgba(0,170,255,0.3); border-radius: 12px;
+    padding: 18px; text-align: center; margin-bottom: 24px;
+    position: relative; overflow: hidden;
+  }
+  .voda-box::before {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,170,255,0.05), transparent);
+    animation: shimmer 3s infinite;
+  }
+  @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+  .voda-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .voda-icon { font-size: 22px; margin-bottom: 4px; }
+  .voda-number { font-family: 'Bebas Neue', cursive; font-size: 32px; letter-spacing: 4px; color: var(--white); direction: ltr; }
+  .copy-btn {
+    margin-top: 10px; background: rgba(0,170,255,0.15); border: 1px solid var(--blue);
+    color: var(--blue); padding: 8px 22px; border-radius: 20px;
+    font-family: 'Cairo', sans-serif; font-size: 13px; cursor: pointer; transition: all 0.2s; letter-spacing: 1px;
+    box-shadow: 0 0 12px rgba(0,170,255,0.4), inset 0 0 12px rgba(0,170,255,0.05);
+    animation: btnPulse 2s ease-in-out infinite;
+  }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(0,170,255,0.4), inset 0 0 12px rgba(0,170,255,0.05); }
+    50% { box-shadow: 0 0 25px rgba(0,170,255,0.8), inset 0 0 18px rgba(0,170,255,0.1); }
+  }
+  .copy-btn:hover { background: rgba(0,170,255,0.3); box-shadow: 0 0 30px rgba(0,170,255,0.9); transform: scale(1.05); }
+  .copy-btn:active { transform: scale(0.97); }
+  .steps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .step { display: flex; align-items: center; gap: 12px; font-size: 13px; color: rgba(255,255,255,0.6); }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--blue);
+    color: var(--blue); font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    box-shadow: 0 0 8px rgba(0,170,255,0.3);
+  }
+  .input-group { margin-bottom: 14px; }
+  .input-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 6px; letter-spacing: 1px; display: block; }
+  input {
+    width: 100%; background: #0f0f0f; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; padding: 13px 16px; color: var(--white);
+    font-family: 'Cairo', sans-serif; font-size: 14px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s; direction: ltr;
+  }
+  input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,170,255,0.1); }
+  input::placeholder { color: rgba(255,255,255,0.2); }
+  .submit-btn {
+    width: 100%; padding: 15px;
+    background: linear-gradient(135deg, #0055cc, #0088ff);
+    border: none; border-radius: 12px; color: white;
+    font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
+    letter-spacing: 2px; cursor: pointer; transition: all 0.3s;
+    box-shadow: 0 4px 20px rgba(0,136,255,0.3); margin-top: 8px;
+  }
+  .submit-btn:hover { box-shadow: 0 6px 30px rgba(0,136,255,0.5); transform: translateY(-1px); }
+  .submit-btn:active { transform: translateY(0); }
+  .result {
+    display: none; margin-top: 16px; padding: 14px; border-radius: 10px;
+    text-align: center; font-size: 13px; font-weight: 600; animation: fadeUp 0.3s ease;
+  }
+  .result.success { background: rgba(0,200,100,0.1); border: 1px solid rgba(0,200,100,0.3); color: #00cc66; }
+  .result.error { background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.3); color: #ff4444; }
+  .result.loading { background: rgba(0,170,255,0.1); border: 1px solid rgba(0,170,255,0.2); color: var(--blue); }
+  .security { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 11px; color: rgba(255,255,255,0.25); margin-top: 16px; letter-spacing: 1px; }
+  footer { position: relative; z-index: 1; text-align: center; padding: 20px; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 2px; }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<header>
+  <div class="logo-lines"><div class="center-glow"></div></div>
+  <div class="logo">
+    <span class="normal">SA</span><span class="blue">V</span><span class="normal">AGE</span>
+  </div>
+  <div class="logo-lines"><div class="center-glow"></div></div>
+  <div class="subtitle">بوابة الدفع الآمنة</div>
+</header>
+
+<div class="card">
+  <div class="card-title">تفاصيل التحويل</div>
+
+  <div class="voda-box">
+    <div class="voda-label">رقم فودافون كاش</div>
+    <div class="voda-icon">📱</div>
+    <div class="voda-number" id="vodaNum">01055614664</div>
+    <button class="copy-btn" onclick="copyNumber()">نسخ الرقم</button>
+  </div>
+
+  <div class="steps">
+    <div class="step"><div class="step-num">1</div><span>حوّل المبلغ على الرقم أعلاه</span></div>
+    <div class="step"><div class="step-num">2</div><span>أدخل رقم موبايلك والمبلغ</span></div>
+    <div class="step"><div class="step-num">3</div><span>اضغط تحقق وهيتضاف رصيدك تلقائياً</span></div>
+  </div>
+
+  <div class="input-group">
+    <label class="input-label">المبلغ المحوّل (جنيه)</label>
+    <input type="number" id="amount" placeholder="مثال: 100" min="1">
+  </div>
+
+  <div class="input-group">
+    <label class="input-label">رقم موبايلك اللي حوّلت منه</label>
+    <input type="tel" id="phone" placeholder="مثال: 01012345678">
+  </div>
+
+  <button class="submit-btn" onclick="verify()">✦ تحقق من الدفع ✦</button>
+
+  <div class="result" id="result"></div>
+
+  <div class="security">🔒 مدفوعات آمنة ومشفرة</div>
+</div>
+
+<footer>SAVAGE © 2026 — جميع الحقوق محفوظة</footer>
+
+<script>
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+    container.appendChild(p);
+  }
+
+  function copyNumber() {
+    navigator.clipboard.writeText('01055614664').then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✓ تم النسخ';
+      setTimeout(() => btn.textContent = 'نسخ الرقم', 2000);
+    });
+  }
+
+  function showResult(type, msg) {
+    const el = document.getElementById('result');
+    el.className = 'result ' + type;
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function verify() {
+    const amount = document.getElementById('amount').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+
+    if (!amount || !phone) {
+      showResult('error', '⚠️ برجاء ملء جميع الحقول');
+      return;
+    }
+    if (amount < 1) {
+      showResult('error', '⚠️ المبلغ غير صحيح');
+      return;
+    }
+
+    showResult('loading', '⏳ جاري التحقق من الدفع...');
+
+    fetch('/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount, phone })
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        showResult('success', '✅ تم التحقق! تم إضافة ' + amount + ' جنيه لرصيدك');
+      } else {
+        showResult('error', '❌ ' + (data.message || 'لم يتم التحقق، تأكد من البيانات'));
+      }
+    })
+    .catch(() => {
+      showResult('error', '❌ خطأ في الاتصال، حاول مرة أخرى');
+    });
+  }
+</script>
+</body>
+</html>
